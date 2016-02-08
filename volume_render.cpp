@@ -403,7 +403,7 @@ main(int argc, char **argv)
 	///
 	
 	//need to init Glew before anything else
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__linux__)
     glewExperimental = GL_TRUE;
 #endif
     glewInit();
