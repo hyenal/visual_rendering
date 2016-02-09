@@ -74,15 +74,14 @@ loadGLSLShader(const char *prg,GLuint type)
 	glGetShaderiv(id,GL_COMPILE_STATUS, &compiled);
 	if (compiled != GL_TRUE) {
 		// there was an error => display
-/*
+
 		GLint maxLength;
-		glGetShaderiv(id, GL_OBJECT_INFO_LOG_LENGTH, &maxLength);
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
 		GLchar *infoLog=new GLchar[maxLength+1];
-		glGetInfoLog(id, maxLength, (GLsizei*)NULL, infoLog);
-		fprintf(stderr,"\n\n**** GLSL shader failed to compile ****\n%s",infoLog);
+		glGetShaderInfoLog(id, maxLength, (GLsizei*)NULL, infoLog);
+		fprintf(stderr,"\n\n****%s shader failed to compile ****\n%s",type==GL_VERTEX_SHADER ? "Vertex" : "Fragment",infoLog);
 		delete [](infoLog);
-*/
-		fprintf(stderr,"\n\n**** GLSL shader failed to compile ****\n");
+
 		// exit on error
 //		exit (0);
 	}
