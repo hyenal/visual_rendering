@@ -316,11 +316,11 @@ void pixel_coordinate(int x, int y, int z, int & u, int & v)
       if(v>2559) v=2559;
 }
 
-void loadTexture()
+void loadTexture(const char * imagePath)
 {
     //load the volumetric data from a bitmap file
     unsigned int width, height;
-    unsigned char * dataVolume = loadBMPRaw("images/cthead_assembled.bmp", width, height);
+    unsigned char * dataVolume = loadBMPRaw(imagePath, width, height);
     
     // Create one OpenGL texture for the volumetric data V
     glGenTextures(1, &textureVolumeID);
@@ -421,8 +421,12 @@ main(int argc, char **argv)
 	
 	//Send the geometry to OpenGL
 	createGeometry();
-    
-    loadTexture();
+	
+	if(argc > 1){
+		loadTexture(argv[1]);
+	} else {
+		loadTexture("images/cthead_assembled.bmp");
+	}
 
 	// print a small documentation
 	printf("[q]     - quit\n");
