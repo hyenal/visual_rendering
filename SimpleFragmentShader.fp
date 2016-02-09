@@ -52,6 +52,11 @@ vec2 rotation(float x, float y, float angle)
       float rotx = cos(angle)*x - sin(angle)*y + 0.5f;
       float roty = sin(angle)*x + cos(angle)*y + 0.5f;
 
+      if(rotx > 1){
+         rotx = 1 - rotx;
+      } else if(roty > 1) {
+         roty = 1 - roty;
+      }
       return vec2(rotx,roty);
 }
 
