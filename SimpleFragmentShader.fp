@@ -49,8 +49,8 @@ vec2 rotation(float x, float y, float angle)
       y -= 0.5f; 
 
       //rotate data
-      float rotx = cos(angle)*x + sin(angle)*y + 0.5f;
-      float roty = -sin(angle)*x + cos(angle)*y + 0.5f;
+      float rotx = cos(angle)*x - sin(angle)*y + 0.5f;
+      float roty = sin(angle)*x + cos(angle)*y + 0.5f;
 
       return vec2(rotx,roty);
 }
@@ -69,14 +69,14 @@ void main()
       //color = texture(myTextureSamplerVolume, pixCoord).rgb;
     
       //Accumulate all horizontal slices 
-      vec3 h_slices = vec3(0.f, 0.f, 0.f);
+      /*vec3 h_slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 100; ++i) {
         z = float(i)/100.f;
         pixCoord = pixel_coordinate(x,y,z);
         h_slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
       h_slices /= 100.f;
-      //color = h_slices;
+      color = h_slices;*/
 
       //extract one vertical slice (x and z vary with fragment coordinates, y is fixed)
       z = 100./256.; //extract 100th pixel
@@ -84,14 +84,14 @@ void main()
       //color = texture(myTextureSamplerVolume, pixCoord).rgb;
 
       //Accumulate all vertical slices 
-      vec3 v_slices = vec3(0.f, 0.f, 0.f);
+      /*vec3 v_slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
         z = float(i)/256.f;
         pixCoord = pixel_coordinate(x,z,y);
         v_slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
       v_slices /= 100.f;
-      color = v_slices;
+      color = v_slices;*/
 
 
       //Accumulate all vertical slices after rotation by rotationAngle around the z axis
