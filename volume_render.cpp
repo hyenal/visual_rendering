@@ -88,11 +88,13 @@ void mainKeyboard(unsigned char key, int x, int y)
 		printf("spacebar pressed\n");
 	} else if (key == '+') {
 	    angle += 0.10f;
+		printf("Rotation: %3.3f\n",angle);
 	} else if (key == '-') {
 	    angle -= 0.10f;
+		printf("Rotation: %3.3f\n",angle);
+	} else {
+		printf("key '%c' pressed\n",key);
 	}
-
-	printf("key '%c' pressed\n",key);
 }
 
 /* -------------------------------------------------------- */
