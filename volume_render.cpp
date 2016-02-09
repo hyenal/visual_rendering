@@ -60,6 +60,7 @@ int          g_MainWindow; // glut Window Id
 int          g_W=512;      // window width
 int          g_H=512;      // window width
 float        angle = 0.f;
+float		 iso = 0.0f;
 
 /* --------------------- Geometry ------------------- */
 
@@ -92,6 +93,12 @@ void mainKeyboard(unsigned char key, int x, int y)
 	} else if (key == '-') {
 	    angle -= 0.10f;
 		printf("Rotation: %3.3f\n",angle);
+	} else if (key == 't') {
+		iso += 0.10f;
+		printf("Isosurface: %3.3f\n",iso);
+	} else if (key == 'r') {
+		iso -= 0.10f;
+		printf("Isosurface: %3.3f\n",iso);
 	} else {
 		printf("key '%c' pressed\n",key);
 	}
@@ -172,7 +179,11 @@ void mainRender()
 	
 	// Rotation angle
 	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "angle");
-	glUniform1f(AngleID, angle); 
+	glUniform1f(AngleID, angle);
+  
+	// Isosurface value
+	GLuint IsoID  = glGetUniformLocation(g_glslProgram, "iso");
+	glUniform1f(IsoID,iso);
 	
 	//--- Geometry ---//
 	// 1rst attribute buffer : vertices
