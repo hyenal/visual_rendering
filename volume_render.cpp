@@ -59,7 +59,7 @@ using namespace std;
 int          g_MainWindow; // glut Window Id
 int          g_W=512;      // window width
 int          g_H=512;      // window width
-
+float        angle = 0.f;
 
 /* --------------------- Geometry ------------------- */
 
@@ -84,10 +84,13 @@ void mainKeyboard(unsigned char key, int x, int y)
 {
 	if (key == 'q') {
 		exit (0);
-	} 
-	else if (key == ' ') {
+	} else if (key == ' ') {
 		printf("spacebar pressed\n");
-	} 
+	} else if (key == '+') {
+	    angle += 0.10f;
+	} else if (key == '-') {
+	    angle -= 0.10f;
+	}
 
 	printf("key '%c' pressed\n",key);
 }
@@ -164,6 +167,10 @@ void mainRender()
 	// Send the user-controled variables
 	// ...
 	
+	
+	// Rotation angle
+	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "angle");
+	glUniform1f(AngleID, angle); 
 	
 	//--- Geometry ---//
 	// 1rst attribute buffer : vertices
