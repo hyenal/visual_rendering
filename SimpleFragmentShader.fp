@@ -8,6 +8,8 @@ uniform sampler2D myTextureSamplerVolume;
 
 // Rotation angle
 uniform float angle;
+// Iso value
+uniform float iso;
 
 // Ouput data
 out vec3 color;
@@ -60,13 +62,13 @@ void main()
       vec2 pixCoord;
       vec2 rotPix;
       float x,y,z;
-
-      //extract one horizontal slice (x and y vary with fragment coordinates, z is fixed)
-      x = fragmentUV.x;
+	  x = fragmentUV.x;
       y = fragmentUV.y;
-      z = 82./100.; //extract 82nd slice
+      //extract one horizontal slice (x and y vary with fragment coordinates, z is fixed)
+      
+      /*z = 82./100.; //extract 82nd slice
       pixCoord = pixel_coordinate(x,y,z);
-      //color = texture(myTextureSamplerVolume, pixCoord).rgb;
+      color = texture(myTextureSamplerVolume, pixCoord).rgb;*/
     
       //Accumulate all horizontal slices 
       /*vec3 h_slices = vec3(0.f, 0.f, 0.f);
@@ -79,8 +81,8 @@ void main()
       color = h_slices;*/
 
       //extract one vertical slice (x and z vary with fragment coordinates, y is fixed)
-      z = 100./256.; //extract 100th pixel
-      pixCoord = pixel_coordinate(x,z,y); 
+      /*z = 100./256.; //extract 100th pixel
+      pixCoord = pixel_coordinate(x,z,y); */
       //color = texture(myTextureSamplerVolume, pixCoord).rgb;
 
       //Accumulate all vertical slices 
@@ -105,11 +107,19 @@ void main()
       slices /= 100.f;
       color = slices;
 
-
-/*
      //Ray marching until density above a threshold (i.e., extract an iso-surface)
-     //...
-*/
+     float isIso = 0.0f;
+      for(int i=0; i< 256; ++i) {
+        z = float(i)/256.f;
+        rotPix = rotation(x,z,angle);
+        pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
+        if(texture(myTextureSamplerVolume, pixCoord).r > iso){
+        	isIso = 1.0f;
+        	break;
+        }
+      }
+      color.r *= (1.0+isIso);//temp, to display both results
+
 
 
 /*
