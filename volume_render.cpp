@@ -176,10 +176,21 @@ void mainRender()
 	// Send the user-controled variables
 	// ...
 	
+    GLfloat* rot_data = new GLfloat[9];
+    rot_data[0] = cos(angle);
+	rot_data[1] = sin(angle);
+	rot_data[3] = 0.0f;
+	rot_data[4] = -sin(angle);
+	rot_data[5] = cos(angle);
+	rot_data[6] = 0.0f;
+	rot_data[7] = 0.0f
+	rot_data[8] = 0.0f
+	rot_data[9] = 1.0f;
 	
 	// Rotation angle
-	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "angle");
-	glUniform1f(AngleID, angle);
+	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "rot_mat");
+    glUniformMatrix3fv(	AngleID, 1, GL_FALSE, rot_data);
+
   
 	// Isosurface value
 	GLuint IsoID  = glGetUniformLocation(g_glslProgram, "iso");
