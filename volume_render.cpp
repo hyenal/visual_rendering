@@ -179,13 +179,13 @@ void mainRender()
     GLfloat* rot_data = new GLfloat[9];
     rot_data[0] = cos(angle);
 	rot_data[1] = sin(angle);
-	rot_data[3] = 0.0f;
-	rot_data[4] = -sin(angle);
-	rot_data[5] = cos(angle);
+	rot_data[2] = 0.0f;
+	rot_data[3] = -sin(angle);
+	rot_data[4] = cos(angle);
+	rot_data[5] = 0.0f;
 	rot_data[6] = 0.0f;
 	rot_data[7] = 0.0f;
-	rot_data[8] = 0.0f;
-	rot_data[9] = 1.0f;
+	rot_data[8] = 1.0f;
 	
 	// Rotation angle
 	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "rot_mat");

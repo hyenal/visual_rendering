@@ -7,7 +7,7 @@ in vec2 fragmentUV;
 uniform sampler2D myTextureSamplerVolume;
 
 // Rotation angle
-uniform float angle;
+uniform mat3 rot_mat;
 // Iso value
 uniform float iso;
 
@@ -44,17 +44,10 @@ vec2 pixel_coordinate(float x, float y, float z)
 
 // Input: (x,y,angle) coordinates of the point in the volume and rotation angle, between (0,0,0) and (1,1,2Pi)
 // Output: (rotx, roty) rotate pixels
-vec2 rotation(float x, float y, float angle)
+vec2 rotation(float x, float y)
 {
-      //center data in [-0.5;+0.5]
-      x -= 0.5f;
-      y -= 0.5f; 
-
-      //rotate data
-      float rotx = cos(angle)*x - sin(angle)*y + 0.5f;
-      float roty = sin(angle)*x + cos(angle)*y + 0.5f;
-
-      return clamp(vec2(rotx,roty),0.0f,1.0f);
+  vec2 newPos = mat2(rot_mat)*(vec2(x,y)-0.5f)+0.5f;
+  return clamp(newPos,0.0f,1.0f);
 }
 
 void main()
@@ -100,7 +93,7 @@ void main()
       vec3 slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
         z = float(i)/256.f;
-        rotPix = rotation(x,z,angle);
+        rotPix = rotation(x,z);
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
@@ -111,7 +104,7 @@ void main()
      float isIso = 0.0f;
       for(int i=0; i< 256; ++i) {
         z = float(i)/256.f;
-        rotPix = rotation(x,z,angle);
+        rotPix = rotation(x,z);
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         if(texture(myTextureSamplerVolume, pixCoord).r > iso){
         	isIso = 1.0f;
