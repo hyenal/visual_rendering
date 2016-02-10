@@ -183,8 +183,8 @@ void mainRender()
 	rot_data[4] = -sin(angle);
 	rot_data[5] = cos(angle);
 	rot_data[6] = 0.0f;
-	rot_data[7] = 0.0f
-	rot_data[8] = 0.0f
+	rot_data[7] = 0.0f;
+	rot_data[8] = 0.0f;
 	rot_data[9] = 1.0f;
 	
 	// Rotation angle
