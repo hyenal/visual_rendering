@@ -85,7 +85,7 @@ void main()
         pixCoord = pixel_coordinate(x,z,y);
         v_slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
-      v_slices /= 100.f;
+      v_slices /= 256.f;
       color = v_slices;*/
 
 
@@ -97,7 +97,7 @@ void main()
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
-      slices /= 100.f;
+      slices /= 256.f;
       color = slices;
 
      //Ray marching until density above a threshold (i.e., extract an iso-surface)
