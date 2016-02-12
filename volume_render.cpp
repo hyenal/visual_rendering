@@ -60,7 +60,7 @@ int          g_MainWindow; // glut Window Id
 int          g_W=512;      // window width
 int          g_H=512;      // window width
 float        angle = 0.f;
-float		 iso = 0.0f;
+float		 iso = 0.5f;
 
 /* --------------------- Geometry ------------------- */
 
@@ -174,8 +174,8 @@ void mainRender()
 	// ...
 	
 	// Send the user-controled variables
-	// ...
 	
+	//Rotation matrix
     GLfloat* rot_data = new GLfloat[9];
     rot_data[0] = cos(angle);
 	rot_data[1] = sin(angle);
@@ -186,13 +186,10 @@ void mainRender()
 	rot_data[6] = 0.0f;
 	rot_data[7] = 0.0f;
 	rot_data[8] = 1.0f;
-	
-	// Rotation angle
 	GLuint AngleID  = glGetUniformLocation(g_glslProgram, "rot_mat");
     glUniformMatrix3fv(	AngleID, 1, GL_FALSE, rot_data);
 
-  
-	// Isosurface value
+	// Isosurface threshold value
 	GLuint IsoID  = glGetUniformLocation(g_glslProgram, "iso");
 	glUniform1f(IsoID,iso);
 	

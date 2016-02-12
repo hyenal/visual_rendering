@@ -44,9 +44,9 @@ vec2 pixel_coordinate(float x, float y, float z)
 
 // Input: (x,y,angle) coordinates of the point in the volume and rotation angle, between (0,0,0) and (1,1,2Pi)
 // Output: (rotx, roty) rotate pixels
-vec2 rotation(float x, float y)
+vec2 rotation(vec2 xy)
 {
-  vec2 newPos = mat2(rot_mat)*(vec2(x,y)-0.5f)+0.5f;
+  vec2 newPos = mat2(rot_mat)*(xy-0.5f)+0.5f;
   return clamp(newPos,0.0f,1.0f);
 }
 
@@ -57,11 +57,12 @@ void main()
       float x,y,z;
 	  x = fragmentUV.x;
       y = fragmentUV.y;
-      //extract one horizontal slice (x and y vary with fragment coordinates, z is fixed)
-      
+
+	  //extract one horizontal slice (x and y vary with fragment coordinates, z is fixed)
       /*z = 82./100.; //extract 82nd slice
       pixCoord = pixel_coordinate(x,y,z);
-      color = texture(myTextureSamplerVolume, pixCoord).rgb;*/
+      color = texture(myTextureSamplerVolume, pixCoord).rgb;
+	  */
     
       //Accumulate all horizontal slices 
       /*vec3 h_slices = vec3(0.f, 0.f, 0.f);
@@ -73,10 +74,11 @@ void main()
       h_slices /= 100.f;
       color = h_slices;*/
 
-      //extract one vertical slice (x and z vary with fragment coordinates, y is fixed)
+      //Extract one vertical slice (x and z vary with fragment coordinates, y is fixed)
       /*z = 100./256.; //extract 100th pixel
-      pixCoord = pixel_coordinate(x,z,y); */
-      //color = texture(myTextureSamplerVolume, pixCoord).rgb;
+      pixCoord = pixel_coordinate(x,z,y);
+      color = texture(myTextureSamplerVolume, pixCoord).rgb;
+	  */
 
       //Accumulate all vertical slices 
       /*vec3 v_slices = vec3(0.f, 0.f, 0.f);
@@ -93,18 +95,20 @@ void main()
       vec3 slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
         z = float(i)/256.f;
-        rotPix = rotation(x,z);
+        rotPix = rotation(vec2(x,z));
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
       slices /= 256.f;
       color = slices;
 
-     //Ray marching until density above a threshold (i.e., extract an iso-surface)
-     float isIso = 0.0f;
+
+	  //Part 2
+      //Ray marching until density above a threshold (i.e., extract an iso-surface)
+      float isIso = 0.0f;
       for(int i=0; i< 256; ++i) {
         z = float(i)/256.f;
-        rotPix = rotation(x,z);
+        rotPix = rotation(vec2(x,z));
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         if(texture(myTextureSamplerVolume, pixCoord).r > iso){
         	isIso = 1.0f;
@@ -115,7 +119,7 @@ void main()
 
 
 
-/*
+/*   //Part 3
      //Ray marching until density above a threshold, display iso-surface normals
      //...
 */
