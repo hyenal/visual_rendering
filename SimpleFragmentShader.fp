@@ -115,19 +115,20 @@ void main()
 
 	  //Part 2
       //Ray marching until density above a threshold (i.e., extract an iso-surface)
-      float isIso = 0.0f;
+      float isInside = 0.0f;
       for(int i=0; i< 256; ++i) {
         // Same thing as before
         z = float(i)/256.f;
         rotPix = rotation(vec2(x,z));
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
-        // Check if we reach the threshold
+        // Check if we have reached the threshold
         if(texture(myTextureSamplerVolume, pixCoord).r > iso){
-        	isIso = 1.0f;
+        	isInside = 1.0f;
         	break;
         }
       }
-      color.r *= (1.0+isIso);//temp, to display both results
+	  //Display the wole object in grey + the volume inside the isosurface in red
+      color.r *= (1.0+isInside);
 
 
 

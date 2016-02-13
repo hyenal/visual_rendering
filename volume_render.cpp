@@ -60,7 +60,7 @@ int          g_MainWindow; // glut Window Id
 int          g_W=512;      // window width
 int          g_H=512;      // window width
 float        angle = 0.f;
-float		 iso = 0.1f;
+float		 iso = 0.5f;
 
 /* --------------------- Geometry ------------------- */
 
