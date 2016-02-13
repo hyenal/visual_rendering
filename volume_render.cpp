@@ -60,7 +60,7 @@ int          g_MainWindow; // glut Window Id
 int          g_W=512;      // window width
 int          g_H=512;      // window width
 float        angle = 0.f;
-float		 iso = 0.5f;
+float		 iso = 0.1f;
 
 /* --------------------- Geometry ------------------- */
 
@@ -176,6 +176,7 @@ void mainRender()
 	// Send the user-controled variables
 	
 	//Rotation matrix
+	//angle = -3.14159/2;
     GLfloat* rot_data = new GLfloat[9];
     rot_data[0] = cos(angle);
 	rot_data[1] = sin(angle);
