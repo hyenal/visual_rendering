@@ -127,9 +127,8 @@ void main()
         	break;
         }
       }
-	  //Display the wole object in grey + the volume inside the isosurface in red
-      color.r *= (1.0+isInside);
-
+	  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
+      color *= (1.0+isInside);
 
 
 /*   //Part 3
