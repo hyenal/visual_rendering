@@ -95,7 +95,8 @@ void main()
       color = v_slices;*/
 
 
-      //Accumulate all vertical slices after rotation by rotationAngle around the z axis
+      //Accumulate all vertical slices after rotation by 
+      // rot_mat matrix around the z axis
       vec3 slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
         // Get ith y pixel
