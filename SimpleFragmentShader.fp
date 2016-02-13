@@ -83,10 +83,14 @@ void main()
       //Accumulate all vertical slices 
       /*vec3 v_slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
+        // Get the ith y direction
         z = float(i)/256.f;
+        // Get pixel coordinate
         pixCoord = pixel_coordinate(x,z,y);
+        // Accumulate result
         v_slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
+      // Normalize
       v_slices /= 256.f;
       color = v_slices;*/
 
@@ -94,11 +98,16 @@ void main()
       //Accumulate all vertical slices after rotation by rotationAngle around the z axis
       vec3 slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 256; ++i) {
+        // Get ith y pixel
         z = float(i)/256.f;
+        // Rotate domain
         rotPix = rotation(vec2(x,z));
+        // Get pixel coordinate
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
+        // Accumulate result
         slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
+      // Normalize color
       slices /= 256.f;
       color = slices;
 
@@ -107,9 +116,11 @@ void main()
       //Ray marching until density above a threshold (i.e., extract an iso-surface)
       float isIso = 0.0f;
       for(int i=0; i< 256; ++i) {
+        // Same thing as before
         z = float(i)/256.f;
         rotPix = rotation(vec2(x,z));
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
+        // Check if we reach the threshold
         if(texture(myTextureSamplerVolume, pixCoord).r > iso){
         	isIso = 1.0f;
         	break;
