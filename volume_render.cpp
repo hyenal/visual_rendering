@@ -176,7 +176,6 @@ void mainRender()
 	// Send the user-controled variables
 	
 	//Rotation matrix
-	//angle = -3.14159/2;
     GLfloat* rot_data = new GLfloat[9];
     rot_data[0] = cos(angle);
 	rot_data[1] = sin(angle);
