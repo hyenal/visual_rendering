@@ -11,6 +11,8 @@ uniform sampler2D myTextureSamplerNormals;
 uniform mat3 rot_mat;
 // Iso value
 uniform float iso;
+// Rendering
+uniform int rendering;
 
 // Ouput data
 out vec3 color;
@@ -96,24 +98,6 @@ void main()
       color = v_slices;*/
 
 
-      //Accumulate all vertical slices after rotation by 
-      // rot_mat matrix around the z axis
-      vec3 slices = vec3(0.f, 0.f, 0.f);
-      for(int i=0; i< 256; ++i) {
-        // Get ith y pixel
-        z = float(i)/256.f;
-        // Rotate domain
-        rotPix = rotation(vec2(x,z));
-        // Get pixel coordinate
-        pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
-        // Accumulate result
-        slices += texture(myTextureSamplerVolume, pixCoord).rgb;
-      }
-      // Normalize color
-      slices /= 256.f;
-      color = slices;
-
-
 	  //Part 2
       //Ray marching until density above a threshold (i.e., extract an iso-surface)
       float isInside = 0.0f;
@@ -128,37 +112,60 @@ void main()
         	break;
         }
       }
-	  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
-      color *= (1.0+isInside);
+	  
+      if(rendering == 3)
+	  { 
+		  //Accumulate all vertical slices after rotation by 
+		  // rot_mat matrix around the z axis
+		  vec3 slices = vec3(0.f, 0.f, 0.f);
+		  for(int i=0; i< 256; ++i) {
+			// Get ith y pixel
+			z = float(i)/256.f;
+			// Rotate domain
+			rotPix = rotation(vec2(x,z));
+			// Get pixel coordinate
+			pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
+			// Accumulate result
+			slices += texture(myTextureSamplerVolume, pixCoord).rgb;
+		  }
+		  // Normalize color
+		  slices /= 256.f;
+		  color = slices;
+		  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
+		  color *= (1.0+isInside);
+		}
+		else if(rendering == 2)
+		{
+			//Part 3
+			//Ray marching until density above a threshold, display iso-surface normals
+			color = isInside*texture(myTextureSamplerNormals, pixCoord).rgb;
+		}
+		else
+		{
+			//Ray marching until density above a threshold, display shaded iso-surface
+			// Phong Shader
+			if (isInside == 1.0f)
+			{
+				// View direction
+				vec3 viewDirection = rot_mat*vec3(0.0, 1.0, 0.0);
 
+				float specular_exponent = 10.0;
+				vec3 diffuse_color = vec3(0.8, 0.8, 0.8);
+				vec3 specular_color = vec3(1.0, 1.0, 1.0);
 
-	 //Part 3
-     //Ray marching until density above a threshold, display iso-surface normals
-	 color = isInside*texture(myTextureSamplerNormals, pixCoord).rgb;
-
-    //Ray marching until density above a threshold, display shaded iso-surface
-	// Phong Shader
-	if (isInside == 1.0f)
-	{
-		// View direction
-		vec3 viewDirection = rot_mat*vec3(0.0, 1.0, 0.0);
-
-		float specular_exponent = 10.0;
-		vec3 diffuse_color = vec3(0.8, 0.8, 0.8);
-		vec3 specular_color = vec3(1.0, 1.0, 1.0);
-
-		// Normal
-		vec3 N = 2.0*texture(myTextureSamplerNormals, pixCoord).rgb - vec3(1.0, 1.0, 1.0);
-		// Light direction: at view point
-		vec3 L = viewDirection;
+				// Normal
+				vec3 N = 2.0*texture(myTextureSamplerNormals, pixCoord).rgb - vec3(1.0, 1.0, 1.0);
+				// Light direction: at view point
+				vec3 L = viewDirection;
           
-		float dif = max(dot(-L,N),0.0);
+				float dif = max(dot(-L,N),0.0);
           
-		vec3 R = normalize(2*N*dot(viewDirection,N) - viewDirection);
-		float spec = (pow(max(dot(R,L),0.0),specular_exponent));
+				vec3 R = normalize(2*N*dot(viewDirection,N) - viewDirection);
+				float spec = (pow(max(dot(R,L),0.0),specular_exponent));
           
-		color = dif*diffuse_color  + spec*specular_color;
-	}
-	else
-		color = vec3(0.0, 0.0, 0.0);
+				color = dif*diffuse_color  + spec*specular_color;
+			}
+			else
+				color = vec3(0.0, 0.0, 0.0);
+		}
 }

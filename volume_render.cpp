@@ -61,6 +61,7 @@ int          g_W=512;      // window width
 int          g_H=512;      // window width
 float        angle = 0.f;
 float		 iso = 0.5f;
+int			 rendering = 1;
 
 /* --------------------- Geometry ------------------- */
 
@@ -100,9 +101,31 @@ void mainKeyboard(unsigned char key, int x, int y)
 	} else if (key == 'r') {
 		iso -= 0.05f;
 		printf("Isosurface: %3.3f\n",iso);
+	} else if (key == '1') {
+		rendering = 1;
+		printf("Rendering: Phong",iso);
+	} else if (key == '2') {
+		rendering = 2;
+		printf("Rendering: Normal map",iso);
+	} else if (key == '3') {
+		rendering = 3;
+		printf("Rendering: Accumulative",iso);
 	} else {
 		printf("key '%c' pressed\n",key);
 	}
+}
+
+void print_usage()
+{
+	printf("[q] \t - Quit\n");
+	printf("[+] \t - Turn right\n");
+	printf("[-] \t - Turn left\n");
+	printf("[t] \t - Increase isosurface value\n");
+	printf("[r] \t - Decrease isosurface value\n");
+	printf("Rendering: \n");
+	printf("\t [1] \t - Phong\n");
+	printf("\t [2] \t - Normal map\n");
+	printf("\t [3] \t - Accumulative\n");
 }
 
 /* -------------------------------------------------------- */
@@ -148,6 +171,10 @@ void mainReshape(int w,int h)
 
 void mainRender()
 {
+	// Rendering
+	GLuint renderingID  = glGetUniformLocation(g_glslProgram, "rendering");
+	glUniform1i(renderingID,rendering);
+
 	// Dark background
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	
@@ -495,7 +522,8 @@ main(int argc, char **argv)
 	}
 
 	// print a small documentation
-	printf("[q]     - quit\n");
+	//printf("[q]     - quit\n");
+	print_usage();
 
 	// enter glut main loop - this *never* returns
 	glutMainLoop();
