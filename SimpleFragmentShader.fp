@@ -129,12 +129,11 @@ void main()
         }
       }
 	  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
-      //color *= (1.0+isInside);
+      color *= (1.0+isInside);
 
 
 	 //Part 3
      //Ray marching until density above a threshold, display iso-surface normals
-     //color = isInside*texture(myTextureSamplerVolume, pixCoord).rgb;
 	 color = isInside*texture(myTextureSamplerNormals, pixCoord).rgb;
 
 
