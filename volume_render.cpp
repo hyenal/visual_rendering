@@ -402,9 +402,6 @@ void loadTexture(const char * imagePath)
 				unsigned char Nx = (unsigned char)((-Gx/norm + 1.0)*127.5);
 				unsigned char Ny = (unsigned char)((-Gy/norm + 1.0)*127.5);
 				unsigned char Nz = (unsigned char)((-Gz/norm + 1.0)*127.5);
-				//unsigned char Nx = 255;
-				//unsigned char Ny = 0;
-				//unsigned char Nz = 0;
 
 				// Set values
 				int u, v;
