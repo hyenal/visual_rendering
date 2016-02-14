@@ -5,6 +5,7 @@ in vec2 fragmentUV;
 
 // Values that stay constant
 uniform sampler2D myTextureSamplerVolume;
+uniform sampler2D myTextureSamplerNormals;
 
 // Rotation angle
 uniform mat3 rot_mat;
@@ -128,13 +129,14 @@ void main()
         }
       }
 	  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
-      color *= (1.0+isInside);
+      //color *= (1.0+isInside);
 
 
-/*   //Part 3
+	 //Part 3
      //Ray marching until density above a threshold, display iso-surface normals
-     //...
-*/
+     //color = isInside*texture(myTextureSamplerVolume, pixCoord).rgb;
+	 color = isInside*texture(myTextureSamplerNormals, pixCoord).rgb;
+
 
   
 /* 
