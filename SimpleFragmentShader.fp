@@ -149,21 +149,23 @@ void main()
 				// View direction
 				vec3 viewDirection = rot_mat*vec3(0.0, 1.0, 0.0);
 
-				float specular_exponent = 10.0;
+				float specular_exponent = 64.0;
 				vec3 diffuse_color = vec3(0.8, 0.8, 0.8);
 				vec3 specular_color = vec3(1.0, 1.0, 1.0);
 
 				// Normal
-				vec3 N = 2.0*texture(myTextureSamplerNormals, pixCoord).rgb - vec3(1.0, 1.0, 1.0);
+				vec3 N = normalize(2.0f*texture(myTextureSamplerNormals, pixCoord).rgb - 1.0f);
 				// Light direction: at view point
 				vec3 L = viewDirection;
           
 				float dif = max(dot(-L,N),0.0);
           
-				vec3 R = normalize(2*N*dot(viewDirection,N) - viewDirection);
+				vec3 R = reflect(-viewDirection,N);//We need -viewDirection as we want the vector (viewPos,0)
+
+				//normalize(2*N*dot(viewDirection,N) - viewDirection);
 				float spec = (pow(max(dot(R,L),0.0),specular_exponent));
           
-				color = dif*diffuse_color  + spec*specular_color;
+				color = dif*diffuse_color + spec*specular_color;
 			}
 			else
 				color = vec3(0.0, 0.0, 0.0);
