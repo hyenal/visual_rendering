@@ -103,13 +103,13 @@ void mainKeyboard(unsigned char key, int x, int y)
 		printf("Isosurface: %3.3f\n",iso);
 	} else if (key == '1') {
 		rendering = 1;
-		printf("Rendering: Phong",iso);
+		printf("Rendering: Phong");
 	} else if (key == '2') {
 		rendering = 2;
-		printf("Rendering: Normal map",iso);
+		printf("Rendering: Normal map");
 	} else if (key == '3') {
 		rendering = 3;
-		printf("Rendering: Accumulative",iso);
+		printf("Rendering: Accumulative");
 	} else {
 		printf("key '%c' pressed\n",key);
 	}
