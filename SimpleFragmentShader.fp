@@ -50,7 +50,9 @@ vec2 pixel_coordinate(float x, float y, float z)
 vec2 rotation(vec2 xy)
 {
   vec2 newPos = mat2(rot_mat)*(xy-0.5f)+0.5f;
-  return clamp(newPos,0.0f,1.0f);
+  if(newPos.x < 0 || newPos.x > 1 || newPos.y < 0 || newPos.y > 1)
+    newPos = vec2(-2.f, -2.f);
+  return newPos;
 }
 
 void main()
@@ -106,18 +108,27 @@ void main()
         z = float(i)/256.f;
         rotPix = rotation(vec2(x,z));
         pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
-        // Check if we have reached the threshold
-        if(texture(myTextureSamplerVolume, pixCoord).r > iso){
-        	isInside = 1.0f;
-        	break;
+        // Check if pixel is in the window
+        if(pixCoord.x > -2){
+          // Check if we have reached the threshold
+          if(texture(myTextureSamplerVolume, pixCoord).r > iso){
+        	  isInside = 1.0f;
+        	  break;
+          }
         }
       }
+	  
+	  // if pixel coord hasn't match anything
+	  if(pixCoord.x == -2)
+	    pixCoord = clamp(mat2(rot_mat)*(vec2(x,z)-0.5f)+0.5f,0.0f,1.0f);
 	  
       if(rendering == 3)
 	  { 
 		  //Accumulate all vertical slices after rotation by 
 		  // rot_mat matrix around the z axis
 		  vec3 slices = vec3(0.f, 0.f, 0.f);
+		  int count = 0;
+		  count = 0;
 		  for(int i=0; i< 256; ++i) {
 			// Get ith y pixel
 			z = float(i)/256.f;
@@ -125,11 +136,16 @@ void main()
 			rotPix = rotation(vec2(x,z));
 			// Get pixel coordinate
 			pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
-			// Accumulate result
-			slices += texture(myTextureSamplerVolume, pixCoord).rgb;
+			// Check if pixel is the window
+			if(pixCoord.x > -2){
+			  // Update counter
+			  count += 1;
+			  // Accumulate result
+			  slices += texture(myTextureSamplerVolume, pixCoord).rgb;
+			}
 		  }
 		  // Normalize color
-		  slices /= 256.f;
+		  slices /= (float(count) + 1E-6);
 		  color = slices;
 		  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
 		  color *= (1.0+isInside);
