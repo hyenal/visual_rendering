@@ -171,14 +171,13 @@ void main()
 
 				// Normal
 				vec3 N = normalize(2.0f*texture(myTextureSamplerNormals, pixCoord).rgb - 1.0f);
-				// Light direction: at view point
+				// Light direction: at view direction
 				vec3 L = viewDirection;
           
 				float dif = max(dot(-L,N),0.0);
           
 				vec3 R = reflect(-viewDirection,N);//We need -viewDirection as we want the vector (viewPos,0)
 
-				//normalize(2*N*dot(viewDirection,N) - viewDirection);
 				float spec = (pow(max(dot(R,L),0.0),specular_exponent));
           
 				color = dif*diffuse_color + spec*specular_color;
