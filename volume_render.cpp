@@ -420,9 +420,9 @@ void loadTexture(const char * imagePath)
 				pixel_coordinate(x, y, z + 1, u_zp, v_zp);
 				pixel_coordinate(x, y, z - 1, u_zm, v_zm);
 
-				// Compute values
-				double Gx = (getTextureB(u_xp,v_xp,dataVolume,width,height) - getTextureR(u_xm,v_xm,dataVolume,width,height))/2.0;
-				double Gy = (getTextureG(u_yp,v_yp,dataVolume,width,height) - getTextureR(u_ym,v_ym,dataVolume,width,height))/2.0;
+				// Compute values. In this case, using getTextureB, getTextureG, getTextureR does not make any difference as three channels store the same value.
+				double Gx = (getTextureB(u_xp,v_xp,dataVolume,width,height) - getTextureB(u_xm,v_xm,dataVolume,width,height))/2.0;
+				double Gy = (getTextureG(u_yp,v_yp,dataVolume,width,height) - getTextureG(u_ym,v_ym,dataVolume,width,height))/2.0;
 				double Gz = (getTextureR(u_zp,v_zp,dataVolume,width,height) - getTextureR(u_zm,v_zm,dataVolume,width,height))/2.0;
 				double norm = sqrt(Gx*Gx + Gy*Gy + Gz*Gz);
 
@@ -430,7 +430,7 @@ void loadTexture(const char * imagePath)
 				unsigned char Ny = (unsigned char)((-Gy/norm + 1.0)*127.5);
 				unsigned char Nz = (unsigned char)((-Gz/norm + 1.0)*127.5);
 
-				// Set values
+				// Set values. In this case, we need to be careul when storing the x,y and z normal coordinates in the appropiate channel
 				int u, v;
 				pixel_coordinate(x, y, z, u, v);
 				setTextureB(u,v,dataNormals,width,height,Nx);
