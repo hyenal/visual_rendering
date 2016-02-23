@@ -110,6 +110,9 @@ void mainKeyboard(unsigned char key, int x, int y)
 	} else if (key == '3') {
 		rendering = 3;
 		printf("Rendering: Accumulative\n");
+	} else if (key == '4') {
+		rendering = 4;
+		printf("Rendering: Isosurface\n");
 	} else {
 		printf("key '%c' pressed\n",key);
 	}
@@ -126,6 +129,7 @@ void print_usage()
 	printf("\t [1] \t - Phong\n");
 	printf("\t [2] \t - Normal map\n");
 	printf("\t [3] \t - Accumulative\n");
+	printf("\t [4] \t - Isosurface\n");
 }
 
 /* -------------------------------------------------------- */

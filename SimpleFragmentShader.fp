@@ -63,27 +63,28 @@ void main()
 	  x = fragmentUV.x;
       y = fragmentUV.y;
 
+
+	  //Part 1
 	  //extract one horizontal slice (x and y vary with fragment coordinates, z is fixed)
-      /*z = 82./100.; //extract 82nd slice
+      /*
+	  z = 82./100.; //extract 82nd slice
       pixCoord = pixel_coordinate(x,y,z);
       color = texture(myTextureSamplerVolume, pixCoord).rgb;
-	  */
-    
-      //Accumulate all horizontal slices 
-      /*vec3 h_slices = vec3(0.f, 0.f, 0.f);
+
+      //Accumulate all horizontal slices
+      vec3 h_slices = vec3(0.f, 0.f, 0.f);
       for(int i=0; i< 100; ++i) {
         z = float(i)/100.f;
         pixCoord = pixel_coordinate(x,y,z);
         h_slices += texture(myTextureSamplerVolume, pixCoord).rgb;
       }
       h_slices /= 100.f;
-      color = h_slices;*/
+      color = h_slices;
 
       //Extract one vertical slice (x and z vary with fragment coordinates, y is fixed)
-      /*z = 100./256.; //extract 100th pixel
+      z = 100./256.; //extract 100th pixel
       pixCoord = pixel_coordinate(x,z,y);
       color = texture(myTextureSamplerVolume, pixCoord).rgb;
-	  */
 
       //Accumulate all vertical slices 
       /*vec3 v_slices = vec3(0.f, 0.f, 0.f);
@@ -97,7 +98,8 @@ void main()
       }
       // Normalize
       v_slices /= 256.f;
-      color = v_slices;*/
+      color = v_slices;
+	  */
 
 
 	  //Part 2
@@ -107,9 +109,9 @@ void main()
         // Same thing as before
         z = float(i)/256.f;
         rotPix = rotation(vec2(x,z));
-        pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
         // Check if pixel is in the window
-        if(pixCoord.x > -2){
+        if(rotPix.x > -2.0){
+		  pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
           // Check if we have reached the threshold
           if(texture(myTextureSamplerVolume, pixCoord).r > iso){
         	  isInside = 1.0f;
@@ -117,18 +119,20 @@ void main()
           }
         }
       }
-	  
+
 	  // if pixel coord hasn't match anything
 	  if(pixCoord.x == -2)
 	    pixCoord = clamp(mat2(rot_mat)*(vec2(x,z)-0.5f)+0.5f,0.0f,1.0f);
-	  
-      if(rendering == 3)
+
+	  if(rendering == 4){ //Isosurface
+		  color = vec3(isInside);
+	  }
+	  else if(rendering == 3) //Accumulation + isosurface
 	  { 
 		  //Accumulate all vertical slices after rotation by 
 		  // rot_mat matrix around the z axis
 		  vec3 slices = vec3(0.f, 0.f, 0.f);
 		  int count = 0;
-		  count = 0;
 		  for(int i=0; i< 256; ++i) {
 			// Get ith y pixel
 			z = float(i)/256.f;
@@ -147,19 +151,20 @@ void main()
 		  // Normalize color
 		  slices /= (float(count) + 1E-6);
 		  color = slices;
-		  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shader
+		  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shade
 		  color *= (1.0+isInside);
 		}
-		else if(rendering == 2)
+		else if(rendering == 2) //Normals
 		{
 			//Part 3
 			//Ray marching until density above a threshold, display iso-surface normals
 			color = isInside*texture(myTextureSamplerNormals, pixCoord).rgb;
 		}
-		else
+		else //Phong shading
 		{
 			//Ray marching until density above a threshold, display shaded iso-surface
 			// Phong Shader
+			color = vec3(0.0, 0.0, 0.0);
 			if (isInside == 1.0f)
 			{
 				// View direction
@@ -182,7 +187,6 @@ void main()
           
 				color = dif*diffuse_color + spec*specular_color;
 			}
-			else
-				color = vec3(0.0, 0.0, 0.0);
+
 		}
 }
