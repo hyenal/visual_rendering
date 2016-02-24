@@ -152,7 +152,8 @@ void main()
 		  slices /= (float(count) + 1E-6);
 		  color = slices;
 		  //Display the wole object in dark grey + the volume inside the isosurface in a lighter shade
-		  color *= (1.0+isInside);
+          color *= (1.0+isInside);
+		  //color.g *= (1.0+isInside); //Alt: green channel only
 		}
 		else if(rendering == 2) //Normals
 		{
