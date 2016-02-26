@@ -120,8 +120,8 @@ void main()
         }
       }
 
-	  // if pixel coord hasn't match anything
-	  if(pixCoord.x == -2)
+	  // if ray coord hasn't match anything
+	  if(rotPix.x == -2)
 	    pixCoord = clamp(mat2(rot_mat)*(vec2(x,z)-0.5f)+0.5f,0.0f,1.0f);
 
 	  if(rendering == 4){ //Isosurface
@@ -141,7 +141,7 @@ void main()
 			// Get pixel coordinate
 			pixCoord = pixel_coordinate(rotPix.x,rotPix.y,y);
 			// Check if pixel is the window
-			if(pixCoord.x > -2){
+			if(rotPix.x > -2){
 			  // Update counter
 			  count += 1;
 			  // Accumulate result
