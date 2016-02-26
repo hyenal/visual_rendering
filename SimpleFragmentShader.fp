@@ -171,7 +171,7 @@ void main()
 				// View direction
 				vec3 viewDirection = rot_mat*vec3(0.0, 1.0, 0.0);
 
-				// Shader parameters
+				// Phong parameters
 				float specular_exponent = 64.0;
 				vec3 diffuse_color = vec3(0.8, 0.8, 0.8);
 				vec3 specular_color = vec3(1.0, 1.0, 1.0);
