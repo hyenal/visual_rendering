@@ -171,6 +171,7 @@ void main()
 				// View direction
 				vec3 viewDirection = rot_mat*vec3(0.0, 1.0, 0.0);
 
+				// Shader parameters
 				float specular_exponent = 64.0;
 				vec3 diffuse_color = vec3(0.8, 0.8, 0.8);
 				vec3 specular_color = vec3(1.0, 1.0, 1.0);
@@ -180,12 +181,15 @@ void main()
 				// Light direction: at view direction
 				vec3 L = viewDirection;
           
+				// Diffuse coefficient
 				float dif = max(dot(-L,N),0.0);
-          
+				
+				// Reflected direction
 				vec3 R = reflect(-viewDirection,N);//We need -viewDirection as we want the vector (viewPos,0)
-
+				// Specular coefficient
 				float spec = (pow(max(dot(R,L),0.0),specular_exponent));
-          
+				
+				// Final color
 				color = dif*diffuse_color + spec*specular_color;
 			}
 
